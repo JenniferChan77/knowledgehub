@@ -1,8 +1,14 @@
 @baseUrl = http://localhost:3000/api/v1
 
-### Any route: 404 JSON (there are no real routes yet)
+### 1. Unknown route: 404 ROUTE_NOT_FOUND
 GET {{baseUrl}}/articles
 
-### Send your own request ID: it comes back in the response header
+### 2. Your own request ID comes back in the header
 GET {{baseUrl}}/articles
 X-Request-Id: jennifer-test-123
+
+### 3. Broken JSON body: 400 INVALID_JSON
+POST {{baseUrl}}/articles
+Content-Type: application/json
+
+{ "title": "Hello",}
