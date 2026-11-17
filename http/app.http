@@ -1,0 +1,8 @@
+@baseUrl = http://localhost:3000/api/v1
+
+### Any route: 404 JSON (there are no real routes yet)
+GET {{baseUrl}}/articles
+
+### Send your own request ID: it comes back in the response header
+GET {{baseUrl}}/articles
+X-Request-Id: jennifer-test-123
