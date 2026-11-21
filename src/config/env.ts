@@ -21,11 +21,20 @@ function readPort(): number {
   return port;
 }
 
+function readRequired(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`${name} is required`);
+  }
+  return value;
+}
+
 function loadEnv() {
   try {
     return {
       NODE_ENV: readNodeEnv(),
       PORT: readPort(),
+      DATABASE_URL: readRequired('DATABASE_URL'),
     } as const;
   } catch (error) {
     console.error(`Invalid environment variables: ${(error as Error).message}`);
