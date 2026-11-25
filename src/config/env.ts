@@ -29,12 +29,32 @@ function readRequired(name: string): string {
   return value;
 }
 
+function readSecret(name: string, minLength: number): string {
+  const value = readRequired(name);
+  if (value.length < minLength) {
+    throw new Error(`${name} must be at least ${minLength} characters`);
+  }
+  return value;
+}
+
+function readPositiveInt(name: string, defaultVaule: number): number {
+  const raw = process.env[name];
+  if (raw === undefined || raw === '') return defaultVaule;
+  const value = Number(raw);
+  if (!Number.isInteger(value) || value <= 0) {
+    throw new Error(`${name} must be a positive integer, got "${raw}"`);
+  }
+  return value;
+}
+
 function loadEnv() {
   try {
     return {
       NODE_ENV: readNodeEnv(),
       PORT: readPort(),
       DATABASE_URL: readRequired('DATABASE_URL'),
+      JWT_SECRET: readSecret('JWT_SECRET', 32),
+      JWT_EXPIRES_IN_SECONDS: readPositiveInt('JWT_EXPIRES_IN_SECONDS', 3600),
     } as const;
   } catch (error) {
     console.error(`Invalid environment variables: ${(error as Error).message}`);
